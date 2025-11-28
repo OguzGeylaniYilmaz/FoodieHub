@@ -22,6 +22,7 @@ namespace FoodieHub.API.Mapping
             CreateMap<Message, ResultMessageDto>().ReverseMap();
 
             CreateMap<Product, CreateProductDto>().ReverseMap();
+            CreateMap<Product, ResultProductWithCategory>().ForMember(x => x.CategoryName, y => y.MapFrom(z => z.Category.CategoryName)).ReverseMap();
 
 
         }

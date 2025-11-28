@@ -4,6 +4,7 @@ using FoodieHub.API.Context;
 using FoodieHub.API.Dtos.ProductDtos;
 using FoodieHub.API.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FoodieHub.API.Controllers
 {
@@ -96,6 +97,13 @@ namespace FoodieHub.API.Controllers
             _apiContext.Products.Add(product);
             _apiContext.SaveChanges();
             return Ok("Product created successfully.");
+        }
+
+        [HttpGet("ProductListWithCategory")]
+        public IActionResult GetProductListWithCategory()
+        {
+            var product = _apiContext.Products.Include(p => p.Category).ToList();
+            return Ok(_mapper.Map<List<ResultProductWithCategory>>(product));
         }
     }
 }
