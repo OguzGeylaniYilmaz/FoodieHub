@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApiContext>();
 builder.Services.AddScoped<IValidator<Product>, ProductValidator>();
+builder.Services.AddScoped<IValidator<Service>, ServiceValidator>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddControllers();
