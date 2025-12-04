@@ -71,5 +71,12 @@ namespace FoodieHub.API.Controllers
             _apiContext.SaveChanges();
             return Ok("Message updated successfully");
         }
+
+        [HttpGet("GetReadMessages")]
+        public IActionResult GetUnreadMessages()
+        {
+            var readMessages = _apiContext.Messages.Where(m => !m.IsRead).ToList();
+            return Ok(_mapper.Map<List<ResultMessageDto>>(readMessages));
+        }
     }
 }

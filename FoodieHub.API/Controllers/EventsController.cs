@@ -59,13 +59,18 @@ namespace FoodieHub.API.Controllers
         [HttpPut]
         public IActionResult UpdateEvent(UpdateEventDto updateEvent)
         {
-            var eventEntity = _mapper.Map<Event>(updateEvent);
+            var eventEntity = _context.Events.Find(updateEvent.EventID);
+            if (eventEntity == null)
+            {
+                return NotFound("Event not found");
+            }
+
             var validationResult = _validator.Validate(eventEntity);
             if (!validationResult.IsValid)
             {
                 return BadRequest(validationResult.Errors);
             }
-            _context.Events.Update(eventEntity);
+            _mapper.Map(updateEvent, eventEntity);
             _context.SaveChanges();
             return Ok("Event updated successfully");
         }

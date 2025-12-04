@@ -17,6 +17,7 @@ namespace FoodieHub.API.Context
         public DbSet<Feature> Features { get; set; }
         public DbSet<Gallery> Galleries { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Service> Services { get; set; }

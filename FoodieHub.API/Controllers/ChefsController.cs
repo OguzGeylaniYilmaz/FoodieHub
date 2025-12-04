@@ -1,4 +1,7 @@
-﻿using FoodieHub.API.Context;
+﻿using AutoMapper;
+using FluentValidation;
+using FoodieHub.API.Context;
+using FoodieHub.API.Dtos.ChefDtos;
 using FoodieHub.API.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,39 +12,49 @@ namespace FoodieHub.API.Controllers
     public class ChefsController : ControllerBase
     {
         private readonly ApiContext _apiContext;
+        private readonly IMapper _mapper;
+        private readonly IValidator<Chef> _chefValidator;
 
-        public ChefsController(ApiContext apiContext)
+        public ChefsController(ApiContext apiContext, IMapper mapper, IValidator<Chef> chefValidator)
         {
             _apiContext = apiContext;
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult GetChef(int id)
-        {
-            if (id <= 0)
-            {
-                return BadRequest("Invalid chef ID.");
-            }
-            return Ok(_apiContext.Chefs.Find(id));
+            _mapper = mapper;
+            _chefValidator = chefValidator;
         }
 
         [HttpGet]
         public IActionResult GetChefs()
         {
             var values = _apiContext.Chefs.ToList();
-            return Ok(values);
+            var mappedValues = _mapper.Map<List<ResultChefDto>>(values);
+            return Ok(mappedValues);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetChef(int id)
+        {
+            var chef = _apiContext.Chefs.Find(id);
+            if (chef == null)
+            {
+                return NotFound("Chef not found.");
+            }
+
+            var mappedChef = _mapper.Map<GetByIdChefDto>(chef);
+            return Ok(mappedChef);
         }
 
         [HttpPost]
-        public IActionResult AddChef(Chef chef)
+        public IActionResult AddChef(CreateChefDto chefDto)
         {
-            if (chef == null)
+            var addedChef = _mapper.Map<Chef>(chefDto);
+            var validationResult = _chefValidator.Validate(addedChef);
+            if (!validationResult.IsValid)
             {
-                return BadRequest("Chef cannot be null.");
+                return BadRequest(validationResult.Errors);
             }
-            _apiContext.Chefs.Add(chef);
+            _apiContext.Chefs.Add(addedChef);
             _apiContext.SaveChanges();
-            return Ok(chef);
+            return Ok(addedChef);
         }
 
         [HttpDelete]
@@ -58,17 +71,22 @@ namespace FoodieHub.API.Controllers
         }
 
         [HttpPut]
-        public IActionResult UpdateChef(Chef chef)
+        public IActionResult UpdateChef(UpdateChefDto chefDto)
         {
-            var existingChef = _apiContext.Chefs.Find(chef.ChefID);
+            var existingChef = _apiContext.Chefs.Find(chefDto.ChefID);
             if (existingChef == null)
             {
                 return NotFound("Chef not found.");
             }
-            existingChef.NameSurname = chef.NameSurname;
-            existingChef.Title = chef.Title;
-            existingChef.Description = chef.Description;
-            existingChef.ImageUrl = chef.ImageUrl;
+
+            var updatedChef = _mapper.Map<Chef>(chefDto);
+
+            var validationResult = _chefValidator.Validate(updatedChef);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
+            _mapper.Map(chefDto, existingChef);
             _apiContext.SaveChanges();
             return Ok(existingChef);
         }

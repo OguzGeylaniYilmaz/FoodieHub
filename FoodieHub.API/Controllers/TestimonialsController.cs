@@ -75,15 +75,16 @@ namespace FoodieHub.API.Controllers
             var testimonial = _context.Testimonials.Find(updateTestimonial.TestimonialID);
             if (testimonial == null)
             {
-                return NotFound();
+                return NotFound("Testimonial not found");
             }
-            _mapper.Map(updateTestimonial, testimonial);
+
             var validationResult = _validator.Validate(testimonial);
+
             if (!validationResult.IsValid)
             {
                 return BadRequest(validationResult.Errors);
             }
-            _context.Testimonials.Update(testimonial);
+            _mapper.Map(updateTestimonial, testimonial);
             _context.SaveChanges();
             return Ok("Testimonial updated successfully");
         }
