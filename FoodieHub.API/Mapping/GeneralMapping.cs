@@ -4,6 +4,7 @@ using FoodieHub.API.Dtos.ContactDtos;
 using FoodieHub.API.Dtos.EventDtos;
 using FoodieHub.API.Dtos.FeatureDtos;
 using FoodieHub.API.Dtos.MessageDtos;
+using FoodieHub.API.Dtos.NotificationDtos;
 using FoodieHub.API.Dtos.ProductDtos;
 using FoodieHub.API.Dtos.ServiceDtos;
 using FoodieHub.API.Dtos.TestimonialDtos;
@@ -48,6 +49,11 @@ namespace FoodieHub.API.Mapping
             CreateMap<Chef, CreateChefDto>().ReverseMap();
             CreateMap<Chef, GetByIdChefDto>().ReverseMap();
             CreateMap<Chef, UpdateChefDto>().ReverseMap();
+
+            CreateMap<Notification, ResultNotificationDto>().ReverseMap();
+            CreateMap<Notification, CreateNotificationDto>().ReverseMap();
+            CreateMap<Notification, GetByIdNotificationDto>().ReverseMap();
+            CreateMap<Notification, UpdateNotificationDto>().ReverseMap();
 
         }
     }
