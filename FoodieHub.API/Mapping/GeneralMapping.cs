@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FoodieHub.API.Dtos.CategoryDtos;
 using FoodieHub.API.Dtos.ChefDtos;
 using FoodieHub.API.Dtos.ContactDtos;
 using FoodieHub.API.Dtos.EventDtos;
@@ -16,6 +17,11 @@ namespace FoodieHub.API.Mapping
     {
         public GeneralMapping()
         {
+            CreateMap<Category, ResultCategoryDto>().ReverseMap();
+            CreateMap<Category, UpdateCategoryDto>().ReverseMap();
+            CreateMap<Category, GetByIdCategoryDto>().ReverseMap();
+            CreateMap<Category, CreateCategoryDto>().ReverseMap();
+
             CreateMap<Feature, CreateFeatureDto>().ReverseMap();
             CreateMap<Feature, UpdateFeatureDto>().ReverseMap();
             CreateMap<Feature, GetByIdContactDto>().ReverseMap();

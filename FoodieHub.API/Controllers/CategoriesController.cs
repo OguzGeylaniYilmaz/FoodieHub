@@ -1,4 +1,6 @@
-﻿using FoodieHub.API.Context;
+﻿using AutoMapper;
+using FoodieHub.API.Context;
+using FoodieHub.API.Dtos.CategoryDtos;
 using FoodieHub.API.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,17 +11,20 @@ namespace FoodieHub.API.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly ApiContext _apiContext;
+        private readonly IMapper _mapper;
 
-        public CategoriesController(ApiContext apiContext)
+        public CategoriesController(ApiContext apiContext, IMapper mapper)
         {
             _apiContext = apiContext;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult GetCategories()
         {
             var categories = _apiContext.Categories.ToList();
-            return Ok(categories);
+            var mappedCategories = _mapper.Map<List<ResultCategoryDto>>(categories);
+            return Ok(mappedCategories);
         }
 
         [HttpGet("{id}")]
@@ -30,16 +35,15 @@ namespace FoodieHub.API.Controllers
             {
                 return NotFound("Category not found.");
             }
-            return Ok(category);
+
+            var mappedCategory = _mapper.Map<GetByIdCategoryDto>(category);
+            return Ok(mappedCategory);
         }
 
         [HttpPost]
-        public IActionResult CreateCategory(Category category)
+        public IActionResult CreateCategory(CreateCategoryDto createCategoryDto)
         {
-            if (category == null)
-            {
-                return BadRequest("Category cannot be null.");
-            }
+            var category = _mapper.Map<Category>(createCategoryDto);
             _apiContext.Categories.Add(category);
             _apiContext.SaveChanges();
             return Ok(category);
@@ -59,16 +63,12 @@ namespace FoodieHub.API.Controllers
         }
 
         [HttpPut]
-        public IActionResult UpdateCategory(Category category)
+        public IActionResult UpdateCategory(UpdateCategoryDto updateCategory)
         {
-            var existingCategory = _apiContext.Categories.Find(category.CategoryID);
-            if (existingCategory == null)
-            {
-                return NotFound("Category not found.");
-            }
-            existingCategory.CategoryName = category.CategoryName;
+            var category = _mapper.Map<Category>(updateCategory);
+            _apiContext.Categories.Update(category);
             _apiContext.SaveChanges();
-            return Ok(existingCategory);
+            return Ok("Category updated successfully.");
         }
 
 

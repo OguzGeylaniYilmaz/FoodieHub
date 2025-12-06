@@ -54,7 +54,7 @@ namespace FoodieHub.API.Controllers
             }
             _apiContext.Chefs.Add(addedChef);
             _apiContext.SaveChanges();
-            return Ok(addedChef);
+            return Ok("Chef added succcesfully");
         }
 
         [HttpDelete]
@@ -73,22 +73,15 @@ namespace FoodieHub.API.Controllers
         [HttpPut]
         public IActionResult UpdateChef(UpdateChefDto chefDto)
         {
-            var existingChef = _apiContext.Chefs.Find(chefDto.ChefID);
-            if (existingChef == null)
-            {
-                return NotFound("Chef not found.");
-            }
-
             var updatedChef = _mapper.Map<Chef>(chefDto);
-
             var validationResult = _chefValidator.Validate(updatedChef);
+
             if (!validationResult.IsValid)
             {
                 return BadRequest(validationResult.Errors);
             }
-            _mapper.Map(chefDto, existingChef);
             _apiContext.SaveChanges();
-            return Ok(existingChef);
+            return Ok("Chef updated successfully");
         }
     }
 }
