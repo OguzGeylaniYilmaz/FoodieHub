@@ -70,21 +70,19 @@ namespace FoodieHub.API.Controllers
         }
 
         [HttpPut]
-        public IActionResult UpdateService(UpdateServiceDto updateService)
+        public async Task<IActionResult> UpdateService(int id, UpdateServiceDto updateService)
         {
-            var service = _context.Services.Find(updateService.ServiceID);
+            var service = await _context.Services.FindAsync(id);
             if (service == null)
-            {
                 return NotFound();
-            }
-            _mapper.Map(updateService, service);
+
             var validationResult = _serviceValidator.Validate(service);
             if (!validationResult.IsValid)
             {
                 return BadRequest(validationResult.Errors.Select(x => x.ErrorMessage));
             }
-            _context.Services.Update(service);
-            _context.SaveChanges();
+            _mapper.Map(updateService, service);
+            await _context.SaveChangesAsync();
             return Ok("Service updated successfully");
         }
     }

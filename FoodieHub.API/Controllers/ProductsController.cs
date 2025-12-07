@@ -67,21 +67,21 @@ namespace FoodieHub.API.Controllers
             return Ok("Product deleted successfully.");
         }
 
-        [HttpPut]
-        public IActionResult UpdateProduct(Product product)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateProduct(int id, UpdateProductDto productDto)
         {
-            var existingProduct = _apiContext.Products.Find(product.ProductID);
+            var existingProduct = await _apiContext.Products.FindAsync(id);
             if (existingProduct == null)
             {
                 return NotFound("Product not found.");
             }
-            var validationResult = _productValidator.Validate(product);
+            var validationResult = _productValidator.Validate(existingProduct);
             if (!validationResult.IsValid)
             {
                 return BadRequest(validationResult.Errors.Select(x => x.ErrorMessage));
             }
-            _apiContext.Products.Update(product);
-            _apiContext.SaveChanges();
+            _mapper.Map(productDto, existingProduct);
+            await _apiContext.SaveChangesAsync();
             return Ok("Product updated successfully.");
         }
 

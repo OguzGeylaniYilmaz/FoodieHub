@@ -40,7 +40,7 @@ namespace Foodie.WebUI.Controllers
             {
                 var client = _httpClientFactory.CreateClient();
                 var jsonData = JsonConvert.SerializeObject(createCategoryDto);
-                StringContent stringContent = new StringContent(jsonData, System.Text.Encoding.UTF8, "application/json");
+                StringContent stringContent = new(jsonData, System.Text.Encoding.UTF8, "application/json");
                 var response = await client.PostAsync("https://localhost:7285/api/Categories/", stringContent);
                 if (response.IsSuccessStatusCode)
                 {

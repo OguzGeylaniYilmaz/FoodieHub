@@ -69,23 +69,18 @@ namespace FoodieHub.API.Controllers
             return Ok("Testimonial created successfully");
         }
 
-        [HttpPut]
-        public IActionResult UpdateTestimonial(UpdateTestimonialDto updateTestimonial)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTestimonial(int id, UpdateTestimonialDto testimonialDto)
         {
-            var testimonial = _context.Testimonials.Find(updateTestimonial.TestimonialID);
+            var testimonial = await _context.Testimonials.FindAsync(id);
+
             if (testimonial == null)
-            {
-                return NotFound("Testimonial not found");
-            }
+                return NotFound("Record not found");
 
-            var validationResult = _validator.Validate(testimonial);
+            _mapper.Map(testimonialDto, testimonial);
 
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult.Errors);
-            }
-            _mapper.Map(updateTestimonial, testimonial);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+
             return Ok("Testimonial updated successfully");
         }
     }
