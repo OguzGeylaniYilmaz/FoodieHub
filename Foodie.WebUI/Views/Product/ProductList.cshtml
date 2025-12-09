@@ -19,6 +19,7 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Product Name</th>
+                                    <th scope="col">Category Name</th>
                                     <th scope="col">Edit</th>
                                     <th scope="col">Delete</th>
                                 </tr>
@@ -27,8 +28,9 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <th scope="row">@item.CategoryID</th>
+                                        <th scope="row">@item.ProductID</th>
                                         <td>@item.ProductName</td>
+                                        <td>@item.CategoryName</td>
                                         <td><a href="/Product/UpdateProduct/@item.ProductID" class="btn btn-primary">Edit</a></td>
                                         <td><a href="/Product/DeleteProduct/@item.ProductID" class="btn btn-danger">Delete</a></td>
                                     </tr>

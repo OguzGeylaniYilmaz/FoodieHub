@@ -18,7 +18,7 @@ namespace Foodie.WebUI.Controllers
         public async Task<IActionResult> ProductList()
         {
             var client = _httpClientFactory.CreateClient();
-            var response = await client.GetAsync("https://localhost:7285/api/Products/");
+            var response = await client.GetAsync("https://localhost:7285/api/Products/ProductListWithCategory");
 
             if (response.IsSuccessStatusCode)
             {
@@ -65,6 +65,49 @@ namespace Foodie.WebUI.Controllers
                 }
             }
             return View(createProductDto);
+
+        }
+
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var response = await client.DeleteAsync("https://localhost:7285/api/Products/DeleteProduct?id=" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("ProductList");
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateProduct(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var response = await client.GetAsync("https://localhost:7285/api/Products/GetProductById?id=" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonData = await response.Content.ReadAsStringAsync();
+                var product = JsonConvert.DeserializeObject<GetProductByIdDto>(jsonData);
+                return View(product);
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProduct(UpdateProductDto updateProductDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var client = _httpClientFactory.CreateClient();
+                var jsonData = JsonConvert.SerializeObject(updateProductDto);
+                StringContent stringContent = new(jsonData, System.Text.Encoding.UTF8, "application/json");
+                var response = await client.PutAsync("https://localhost:7285/api/Products/", stringContent);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("ProductList");
+                }
+            }
+            return View(updateProductDto);
         }
     }
 }

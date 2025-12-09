@@ -60,8 +60,8 @@ namespace Foodie.WebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateCategory(int id)
         {
-            var client = _httpClientFactory.CreateClient();
-            var response = await client.GetAsync($"https://localhost:7285/api/Categories/{id}");
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var response = await client.GetAsync("Categories/" + id);
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = await response.Content.ReadAsStringAsync();
