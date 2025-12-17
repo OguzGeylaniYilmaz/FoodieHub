@@ -9,7 +9,7 @@ namespace FoodieHub.API.Context
         {
             optionsBuilder.UseSqlServer("Server=OGUZ;Initial Catalog=FoodieDB;Integrated Security=true;");
         }
-
+        public DbSet<About> Abouts { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Chef> Chefs { get; set; }
         public DbSet<Contact> Contacts { get; set; }
