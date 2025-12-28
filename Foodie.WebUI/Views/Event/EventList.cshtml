@@ -1,0 +1,51 @@
+﻿@model List<ResultEventDto>
+@{
+    ViewData["Title"] = "EventList";
+    Layout = "~/Views/Admin/Index.cshtml";
+}
+
+
+<section class="section">
+    <div class="section-body">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Event List</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col"> # </th>
+                                    <th scope="col"> Event Title </th>
+                                    <th scope="col"> Description </th>
+                                    <th scope="col"> Price </th>
+                                    <th scope="col"> Edit </th>
+                                    <th scope="col"> Delete </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.EventID</td>
+                                        <td>@item.Title</td>
+                                        <td>@item.Description</td>
+                                        <td>@item.Price</td>
+                                        <td><a href="/Event/UpdateEvent/@item.EventID" class="btn btn-primary">Edit</a></td>
+                                        <td><a href="/Event/DeleteEvent/@item.EventID" class="btn btn-danger">Delete</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <a href="/Event/CreateEvent/" class="btn btn-success">Create Event</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+

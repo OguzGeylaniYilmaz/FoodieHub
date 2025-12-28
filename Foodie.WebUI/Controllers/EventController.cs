@@ -1,95 +1,92 @@
-﻿using Foodie.WebUI.Dtos.WhyUsDtos;
+﻿using Foodie.WebUI.Dtos.EventDtos;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace Foodie.WebUI.Controllers
 {
-    public class WhyUsController : Controller
+    public class EventController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public WhyUsController(IHttpClientFactory httpClientFactory)
+        public EventController(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<IActionResult> WhyUsList()
+        public async Task<IActionResult> EventList()
         {
             var client = _httpClientFactory.CreateClient();
-            var response = await client.GetAsync("https://localhost:7285/api/Services");
+            var response = await client.GetAsync("https://localhost:7285/api/Events");
 
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = await response.Content.ReadAsStringAsync();
-                var services = JsonConvert.DeserializeObject<List<ResultWhyUsDto>>(jsonData);
-
-                return View(services);
+                var events = JsonConvert.DeserializeObject<List<ResultEventDto>>(jsonData);
+                return View(events);
             }
             return View();
         }
 
         [HttpGet]
-        public IActionResult CreateWhyUs()
+        public IActionResult CreateEvent()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateWhyUs(CreateWhyUsDto createWhyUsDto)
+        public async Task<IActionResult> CreateEvent(CreateEventDto createEventDto)
         {
             if (ModelState.IsValid)
             {
                 var client = _httpClientFactory.CreateClient();
-                var jsonData = JsonConvert.SerializeObject(createWhyUsDto);
+                var jsonData = JsonConvert.SerializeObject(createEventDto);
                 var content = new StringContent(jsonData, System.Text.Encoding.UTF8, "application/json");
-                var response = await client.PostAsync("https://localhost:7285/api/Services", content);
+                var response = await client.PostAsync("https://localhost:7285/api/Events", content);
                 if (response.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("WhyUsList");
+                    return RedirectToAction("EventList");
                 }
             }
-            return View(createWhyUsDto);
+            return View(createEventDto);
         }
 
-        public async Task<IActionResult> DeleteWhyUs(int id)
+        public async Task<IActionResult> DeleteEvent(int id)
         {
             var client = _httpClientFactory.CreateClient();
-            var response = await client.DeleteAsync($"https://localhost:7285/api/Services?id={id}");
-
+            var response = await client.DeleteAsync($"https://localhost:7285/api/Events?id={id}");
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("WhyUsList");
+                return RedirectToAction("EventList");
             }
-
             return View();
         }
 
         [HttpGet]
-        public async Task<IActionResult> UpdateWhyUs(int id)
+        public async Task<IActionResult> UpdateEvent(int id)
         {
             var client = _httpClientFactory.CreateClient();
-            var response = await client.GetAsync($"https://localhost:7285/api/Services/{id}");
+            var response = await client.GetAsync($"https://localhost:7285/api/Events/{id}");
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = await response.Content.ReadAsStringAsync();
-                var service = JsonConvert.DeserializeObject<GetWhyUsByIdDto>(jsonData);
-                return View(service);
+                var eventDto = JsonConvert.DeserializeObject<GetEventByIdDto>(jsonData);
+                return View(eventDto);
             }
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateWhyUs(int id, UpdateWhyUsDto updateWhyUsDto)
+        public async Task<IActionResult> UpdateEvent(int id, UpdateEventDto updateEventDto)
         {
             if (ModelState.IsValid)
             {
                 var client = _httpClientFactory.CreateClient();
-                var jsonData = JsonConvert.SerializeObject(updateWhyUsDto);
+                var jsonData = JsonConvert.SerializeObject(updateEventDto);
                 var content = new StringContent(jsonData, System.Text.Encoding.UTF8, "application/json");
-                var response = await client.PutAsync($"https://localhost:7285/api/Services/{id}", content);
+                var response = await client.PutAsync($"https://localhost:7285/api/Events/{id}", content);
                 if (response.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("WhyUsList");
+                    return RedirectToAction("EventList");
                 }
             }
             return View();

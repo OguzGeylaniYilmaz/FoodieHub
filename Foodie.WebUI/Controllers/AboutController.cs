@@ -67,8 +67,8 @@ namespace Foodie.WebUI.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = await response.Content.ReadAsStringAsync();
-                var aboutDto = JsonConvert.DeserializeObject<GetAboutByIdDto>(jsonData);
-                return View(aboutDto);
+                var about = JsonConvert.DeserializeObject<GetAboutByIdDto>(jsonData);
+                return View(about);
             }
             return View();
         }
