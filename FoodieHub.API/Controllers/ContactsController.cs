@@ -1,7 +1,9 @@
-﻿using FoodieHub.API.Context;
+﻿using AutoMapper;
+using FoodieHub.API.Context;
 using FoodieHub.API.Dtos.ContactDtos;
 using FoodieHub.API.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FoodieHub.API.Controllers
 {
@@ -10,23 +12,26 @@ namespace FoodieHub.API.Controllers
     public class ContactsController : ControllerBase
     {
         private readonly ApiContext _context;
+        private readonly IMapper _mapper;
 
-        public ContactsController(ApiContext context)
+        public ContactsController(ApiContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public IActionResult GetContacts()
+        public async Task<IActionResult> GetContacts()
         {
-            var contacts = _context.Contacts.ToList();
-            return Ok(contacts);
+            var contacts = await _context.Contacts.ToListAsync();
+            var mappedContacts = _mapper.Map<List<ResultContactDto>>(contacts);
+            return Ok(mappedContacts);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetContact(int id)
+        public async Task<IActionResult> GetContact(int id)
         {
-            var contact = _context.Contacts.Find(id);
+            var contact = await _context.Contacts.FindAsync(id);
             if (contact == null)
             {
                 return NotFound();
@@ -35,36 +40,24 @@ namespace FoodieHub.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateContact(CreateContactDto contactDto)
+        public async Task<IActionResult> CreateContact(CreateContactDto contactDto)
         {
-            Contact contact = new Contact
-            {
-                Address = contactDto.Address,
-                Email = contactDto.Email,
-                MapLocation = contactDto.MapLocation,
-                Phone = contactDto.Phone,
-                OpenHours = contactDto.OpenHours
-            };
-            _context.Contacts.Add(contact);
+            var contact = _mapper.Map<Contact>(contactDto);
+            await _context.Contacts.AddAsync(contact);
             _context.SaveChanges();
             return Ok("Contact created successfully");
-
         }
 
         [HttpPut]
-        public IActionResult UpdateContact(UpdateContactDto contactDto)
+        public async Task<IActionResult> UpdateContact(UpdateContactDto contactDto)
         {
-            var contact = _context.Contacts.Find(contactDto.ContactID);
+            var contact = await _context.Contacts.FindAsync(contactDto.ContactID);
             if (contact == null)
             {
                 return NotFound();
             }
-            contact.Address = contactDto.Address;
-            contact.Email = contactDto.Email;
-            contact.MapLocation = contactDto.MapLocation;
-            contact.Phone = contactDto.Phone;
-            contact.OpenHours = contactDto.OpenHours;
-            _context.Contacts.Update(contact);
+
+            _mapper.Map(contactDto, contact);
             _context.SaveChanges();
             return Ok("Contact updated successfully");
         }

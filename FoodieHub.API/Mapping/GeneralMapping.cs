@@ -31,9 +31,14 @@ namespace FoodieHub.API.Mapping
             CreateMap<Category, GetByIdCategoryDto>().ReverseMap();
             CreateMap<Category, CreateCategoryDto>().ReverseMap();
 
+            CreateMap<Contact, ResultContactDto>().ReverseMap();
+            CreateMap<Contact, UpdateContactDto>().ReverseMap();
+            CreateMap<Contact, GetContactByIdDto>().ReverseMap();
+            CreateMap<Contact, CreateContactDto>().ReverseMap();
+
             CreateMap<Feature, CreateFeatureDto>().ReverseMap();
             CreateMap<Feature, UpdateFeatureDto>().ReverseMap();
-            CreateMap<Feature, GetByIdContactDto>().ReverseMap();
+            CreateMap<Feature, GetByIdFeatureDto>().ReverseMap();
             CreateMap<Feature, ResultFeatureDto>().ReverseMap();
 
             CreateMap<Gallery, CreateGalleryDto>().ReverseMap();

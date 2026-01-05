@@ -1,6 +1,6 @@
 ﻿namespace FoodieHub.API.Dtos.ContactDtos
 {
-    public class GetByIdContactDto
+    public class GetContactByIdDto
     {
         public int ContactID { get; set; }
         public string Address { get; set; }
