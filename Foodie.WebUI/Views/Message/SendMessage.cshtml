@@ -1,0 +1,29 @@
+﻿@model CreateMessageDto
+@{
+    ViewData["Title"] = "SendMessage";
+    Layout = "~/Views/Admin/Index.cshtml";
+}
+
+<form class="php-email-form" method="post">
+    <div class="row gy-4">
+        <div class="col-md-6">
+            <input type="text" asp-for="NameSurname" class="form-control" placeholder="Name & Surname" required=""/>
+        </div>
+         <div class="col-md-6">
+            <input type="email" asp-for="Email" class="form-control" placeholder="E-mail" required=""/>
+        </div>
+        <div class="col-md-12">
+            <input type="text" asp-for="Subject" class="form-control" placeholder="Subject" required="" />
+        </div>
+        <div class="col-md-12">
+            <textarea asp-for="MessageDetail" class="form-control" rows="6" placeholder="Your Message"></textarea>
+        </div>
+        <div class="col-md-12 text-center">
+            <div class="loading">Loading</div>
+            <div class="error-message"></div>
+            <div class="sent-message">Your message has been sent. Thank you!</div>
+            <button type="submit" class="btn btn-primary">Send Message</button>
+        </div>
+    </div>
+</form>
+

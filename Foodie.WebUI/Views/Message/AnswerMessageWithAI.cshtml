@@ -1,0 +1,34 @@
+﻿@model GetMessageByIdDto
+@{
+    ViewData["Title"] = "AnswerMessageWithAI";
+    Layout = "~/Views/Admin/Index.cshtml";
+}
+
+<section class="section">
+    <div class="section-body">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>AI-powered automated message response page</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post"> 
+                            <input type="hidden" asp-for="MessageID"/>
+                            <label>Customer Message</label>
+                            <textarea class="form-control" asp-for="MessageDetail" style="height:200px !important;" rows="4" readonly></textarea>
+                            <br />
+                            <label>OpenAI Automatic Message</label>
+                            <textarea class="form-control" style="height:200px !important;" rows="4" readonly></textarea>
+                            <br />
+                        </form>
+                     </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+

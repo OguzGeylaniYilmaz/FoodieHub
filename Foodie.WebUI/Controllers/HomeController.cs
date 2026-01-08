@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Foodie.WebUI.Models
+namespace Foodie.WebUI.Controllers
 {
     public class HomeController : Controller
     {

@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewData["Title"] = "GenerateRecipe";
+    Layout = "~/Views/Admin/Index.cshtml";
+}
+
+<section class="section">
+    <div class="section-body">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>AI-powered food recommendations.</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            <label>The materials and keywords you have</label>
+                            <input type="text" name="ingredients" class="form-control"/>
+                            <br />
+                            <button type="submit" class="btn btn-primary">Generate Recipe</button>
+                        </form>
+                        @if (ViewBag.Recipe != null)
+                        {
+                            <hr />
+                            <h5>Generated Recipe:</h5>
+                            <p>@ViewBag.Recipe</p>
+                        }
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+
+
