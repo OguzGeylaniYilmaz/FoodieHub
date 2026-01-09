@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Foodie.WebUI.Models
 {
@@ -67,7 +67,7 @@ namespace Foodie.WebUI.Models
 
             var request = new HttpRequestMessage(HttpMethod.Post, "https://api.openai.com/v1/chat/completions")
             {
-                Content = new StringContent(JsonSerializer.Serialize(payload), System.Text.Encoding.UTF8, "application/json")
+                Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(payload), System.Text.Encoding.UTF8, "application/json")
             };
 
             var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
@@ -75,6 +75,55 @@ namespace Foodie.WebUI.Models
 
             var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
             var reader = new StreamReader(stream);
+
+            var sb = new System.Text.StringBuilder();
+            while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
+            {
+                var line = await reader.ReadLineAsync();
+                if (string.IsNullOrWhiteSpace(line) || !line.StartsWith("data: "))
+                    continue;
+                var data = line.Substring("data: ".Length).Trim();
+                if (data == "[DONE]")
+                    break;
+                try
+                {
+                    var chunck = System.Text.Json.JsonSerializer.Deserialize<ChatStreamChunk>(data);
+                    var delta = chunck?.Choices?.FirstOrDefault()?.Delta?.Content;
+                    if (!string.IsNullOrEmpty(delta))
+                    {
+                        sb.Append(delta);
+                        await Clients.Caller.SendAsync("ReceiveToken", cancellationToken);
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+
+            var assistantMessage = sb.ToString();
+            history.Add(new Dictionary<string, string>
+            {
+                ["role"] = "assistant",
+                ["content"] = assistantMessage
+            });
+            await Clients.Caller.SendAsync("ReceiveCompletion", cancellationToken);
+        }
+
+        private sealed class ChatStreamChunk
+        {
+            [JsonPropertyName("choices")] public List<Choice>? Choices { get; set; }
+        }
+
+        private sealed class Choice
+        {
+            [JsonPropertyName("delta")] public Delta? Delta { get; set; }
+            [JsonPropertyName("finish_reason")] public string? FinishReason { get; set; }
+        }
+
+        private sealed class Delta
+        {
+            [JsonPropertyName("content")] public string? Content { get; set; }
         }
     }
 }
