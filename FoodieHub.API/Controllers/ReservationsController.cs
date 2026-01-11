@@ -72,5 +72,35 @@ namespace FoodieHub.API.Controllers
             await _context.SaveChangesAsync();
             return Ok("Reservation updated successfully");
         }
+
+        [HttpGet("GetReservationCount")]
+        public IActionResult GetReservationCount()
+        {
+            var reservationCount = _context.Reservations.Count();
+            return Ok(reservationCount);
+        }
+
+        [HttpGet("GetTotalCustomers")]
+        public IActionResult GetTotalCustomers()
+        {
+            var totalCustomers = _context.Reservations.Sum(r => r.NumberOfPeople);
+            return Ok(totalCustomers);
+        }
+
+        [HttpGet("GetPendingReservations")]
+        public IActionResult GetPendingReservations()
+        {
+            var pendingReservations = _context.Reservations.Count(r => r.ReservationStatus == "Pending");
+            return Ok(pendingReservations);
+
+        }
+
+        [HttpGet("GetConfirmedReservations")]
+        public IActionResult GetConfirmedReservations()
+        {
+            var confirmedReservations = _context.Reservations.Count(r => r.ReservationStatus == "Confirmed");
+            return Ok(confirmedReservations);
+        }
+
     }
 }

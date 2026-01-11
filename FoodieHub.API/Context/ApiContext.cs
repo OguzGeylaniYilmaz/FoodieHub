@@ -13,6 +13,8 @@ namespace FoodieHub.API.Context
         public DbSet<Category> Categories { get; set; }
         public DbSet<Chef> Chefs { get; set; }
         public DbSet<Contact> Contacts { get; set; }
+        public DbSet<EmployeeTask> EmployeeTasks { get; set; }
+        public DbSet<EmployeeTaskChef> EmployeeTaskChefs { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Feature> Features { get; set; }
         public DbSet<Gallery> Galleries { get; set; }
