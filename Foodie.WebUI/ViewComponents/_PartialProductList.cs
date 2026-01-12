@@ -22,7 +22,9 @@ namespace Foodie.WebUI.ViewComponents
             {
                 var jsonData = await response.Content.ReadAsStringAsync();
                 var products = JsonConvert.DeserializeObject<List<ResultProductDto>>(jsonData);
-                return View(products);
+
+                var windowProducts = (products ?? new List<ResultProductDto>()).Take(6).ToList();
+                return View(windowProducts);
             }
             return View();
         }
