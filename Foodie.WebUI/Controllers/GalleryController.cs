@@ -27,5 +27,18 @@ namespace Foodie.WebUI.Controllers
 
             return View();
         }
+
+        public async Task<IActionResult> GalleryDetail(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var response = await client.GetAsync($"https://localhost:7285/api/Galleries/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var galleryItem = JsonConvert.DeserializeObject<ResultGalleryDto>(content);
+                return View(galleryItem);
+            }
+            return View();
+        }
     }
 }
