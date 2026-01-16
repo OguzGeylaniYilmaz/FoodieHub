@@ -6,6 +6,7 @@ using FoodieHub.API.Dtos.ContactDtos;
 using FoodieHub.API.Dtos.EventDtos;
 using FoodieHub.API.Dtos.FeatureDtos;
 using FoodieHub.API.Dtos.GalleryDtos;
+using FoodieHub.API.Dtos.GroupReservationDtos;
 using FoodieHub.API.Dtos.MessageDtos;
 using FoodieHub.API.Dtos.NotificationDtos;
 using FoodieHub.API.Dtos.ProductDtos;
@@ -35,6 +36,11 @@ namespace FoodieHub.API.Mapping
             CreateMap<Contact, UpdateContactDto>().ReverseMap();
             CreateMap<Contact, GetContactByIdDto>().ReverseMap();
             CreateMap<Contact, CreateContactDto>().ReverseMap();
+
+            CreateMap<GroupReservation, CreateGroupReservationDto>().ReverseMap();
+            CreateMap<GroupReservation, UpdateGroupReservationDto>().ReverseMap();
+            CreateMap<GroupReservation, GetGroupReservationDto>().ReverseMap();
+            CreateMap<GroupReservation, ResultGroupReservationDto>().ReverseMap();
 
             CreateMap<Feature, CreateFeatureDto>().ReverseMap();
             CreateMap<Feature, UpdateFeatureDto>().ReverseMap();

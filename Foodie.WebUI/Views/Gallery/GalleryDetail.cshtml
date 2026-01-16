@@ -1,0 +1,31 @@
+﻿@model GetGalleryByIdDto
+@{
+    ViewData["Title"] = "GalleryDetail";
+    Layout = "~/Views/Admin/Index.cshtml";
+}
+
+<section class="section">
+    <div class="section-body">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Gallery Detail</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            <label>Image Title</label>
+                            <input type="text" asp-for="Title"  class="form-control" />
+                            <br />
+                            <label>Image Url</label>
+                            <input type="text" asp-for="ImageUrl" class="form-control" />
+                            <br />
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

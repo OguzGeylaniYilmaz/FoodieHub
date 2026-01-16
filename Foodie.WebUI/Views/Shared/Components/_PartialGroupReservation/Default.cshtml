@@ -1,0 +1,74 @@
+﻿@model List<ResultGroupReservationDto>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Assign Task Table</h4>
+                <div class="card-header-form">
+                    <form>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search">
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <tr>
+                            <th class="text-center">
+                                <div class="custom-checkbox custom-checkbox-table custom-control">
+                                    <input type="checkbox" data-checkboxes="mygroup" data-checkbox-role="dad"
+                                           class="custom-control-input" id="checkbox-all">
+                                    <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
+                                </div>
+                            </th>
+                            <th>Group Title</th>
+                            <th>Contact Person</th>
+                            <th>Person Count</th>
+                            <th>Reservation Status</th>
+                            <th>Due Date</th>
+                            <th>Reservation Date</th>
+                            <th>Priority</th>
+                            <th>Details</th>
+                        </tr>
+
+                        @foreach (var reservation in Model)
+                        {
+
+                            <tr>
+                                <td class="p-0 text-center">
+                                    <div class="custom-checkbox custom-control">
+                                        <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input"
+                                               id="checkbox-1">
+                                        <label for="checkbox-1" class="custom-control-label">&nbsp;</label>
+                                    </div>
+                                </td>
+                                <td>@reservation.GroupTitle</td>
+                                <td>@reservation.PersonToContact</td>
+                                <td>@reservation.PersonCount</td>
+                                <td class="align-middle">
+                                    <div class="progress-text">@reservation.ReservationStatus</div>
+                                    <div class="progress" data-height="6">
+                                        <div class="progress-bar bg-success" data-width="50%"></div>
+                                    </div>
+                                </td>
+                                <td>@reservation.DueDate.ToString()</td>
+                                <td>@reservation.ReservationDate</td>
+                                <td>
+                                    <div class="badge badge-success">@reservation.Priority</div>
+                                </td>
+                                <td><a href="#" class="btn btn-outline-primary">Detail</a></td>
+                            </tr>
+                         }
+    
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

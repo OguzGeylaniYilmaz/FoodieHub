@@ -28,6 +28,7 @@ namespace Foodie.WebUI.Controllers
             return View();
         }
 
+        [HttpGet]
         public async Task<IActionResult> GalleryDetail(int id)
         {
             var client = _httpClientFactory.CreateClient();
@@ -35,8 +36,22 @@ namespace Foodie.WebUI.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var galleryItem = JsonConvert.DeserializeObject<ResultGalleryDto>(content);
+                var galleryItem = JsonConvert.DeserializeObject<GetGalleryByIdDto>(content);
                 return View(galleryItem);
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GalleryDetail(UpdateGalleryDto updateGalleryDto)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var jsonData = JsonConvert.SerializeObject(updateGalleryDto);
+            var content = new StringContent(jsonData, System.Text.Encoding.UTF8, "application/json");
+            var response = await client.PutAsync("https://localhost:7285/api/Galleries", content);
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("GalleryList");
             }
             return View();
         }
