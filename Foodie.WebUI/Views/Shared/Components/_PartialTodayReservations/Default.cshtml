@@ -1,0 +1,58 @@
+﻿@model List<ResultGroupReservationDto>
+
+<div class="col-md-6 col-lg-12 col-xl-6">
+    <div class="card">
+        <div class="card-header">
+            <h4>Today's Reservations</h4>
+        </div>
+
+        <div class="card-body">
+
+            @if (!Model.Any())
+            {
+                <div class="text-center text-muted">
+                    No reservations for today
+                </div>
+            }
+
+            @foreach (var item in Model)
+            {
+                <div class="support-ticket media pb-1 mb-3">
+                    <div class="user-img bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:40px;height:40px;">
+                        <i class="fas fa-users"></i>
+                    </div>
+
+                    <div class="media-body ml-3">
+                        <div class="badge badge-pill
+                                @(item.Priority == "High" ? "badge-danger" :
+                                                           item.Priority == "Medium" ? "badge-warning" :
+                                                           "badge-success")
+                            float-right">
+                        @item.Priority
+                    </div>
+
+                        <span class="font-weight-bold">
+                            @item.GroupTitle
+                        </span>
+
+                        <p class="my-1">
+                            Contact: @item.PersonToContact
+                            | People: @item.PersonCount
+                        </p>
+
+                        <small class="text-muted">
+                            @item.ReservationDate.ToString("dd MMM yyyy HH:mm")
+                            - @item.ReservationStatus
+                        </small>
+                    </div>
+                </div>
+                        }
+        </div>
+
+        <a href="/GroupReservation/Index"
+           class="card-footer card-link text-center small">
+            View All
+        </a>
+    </div>
+</div>

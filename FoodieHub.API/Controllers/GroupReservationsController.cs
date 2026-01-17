@@ -83,5 +83,34 @@ namespace FoodieHub.API.Controllers
             await _context.SaveChangesAsync();
             return Ok("Group reservation deleted successfully.");
         }
+
+        [HttpGet("today")]
+        public async Task<IActionResult> GetTodayReservations()
+        {
+            var today = DateTime.Today;
+
+            var values = await _context.GroupReservations
+                .Where(x => x.ReservationDate.Date == today)
+                .OrderBy(x => x.ReservationDate)
+                .ToListAsync();
+
+            return Ok(values);
+        }
+
+        [HttpGet("upcoming")]
+        public async Task<IActionResult> GetUpcomingReservations()
+        {
+            var today = DateTime.Today;
+
+            var values = await _context.GroupReservations
+                .Where(x => x.ReservationDate.Date > today)
+                .OrderBy(x => x.ReservationDate)
+                .Take(10)
+                .ToListAsync();
+
+            return Ok(values);
+        }
     }
+
+
 }

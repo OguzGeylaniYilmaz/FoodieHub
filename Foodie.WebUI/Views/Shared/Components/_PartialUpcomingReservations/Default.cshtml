@@ -1,0 +1,81 @@
+﻿@model List<ResultGroupReservationDto>
+
+<div class="col-md-6 col-lg-12 col-xl-6">
+    <div class="card">
+        <div class="card-header">
+            <h4>Upcoming Reservations</h4>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Group</th>
+                            <th>Date</th>
+                            <th>People</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">
+                                    No upcoming reservations
+                                </td>
+                            </tr>
+                        }
+
+                        @{
+                            int index = 1;
+                        }
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@index</td>
+                                <td>
+                                    <strong>@item.GroupTitle</strong><br />
+                                    <small class="text-muted">
+                                        @item.PersonToContact
+                                    </small>
+                                </td>
+                                <td>
+                                    @item.ReservationDate.ToString("dd MMM yyyy")
+                                </td>
+                                <td>
+                                    <i class="fas fa-users text-primary"></i>
+                                    @item.PersonCount
+                                </td>
+                                <td>
+                                    <span class="badge badge-pill
+                                            @(item.ReservationStatus == "Confirmed" ? "badge-success" :
+                                                                                    item.ReservationStatus == "Pending" ? "badge-warning" :
+                                                                                    "badge-danger")">
+                                    @item.ReservationStatus
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge badge-light">
+                                    @item.Priority
+                                </span>
+                            </td>
+                        </tr>
+
+                                                index++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <a href="/GroupReservation/Index"
+           class="card-footer card-link text-center small">
+            View All Reservations
+        </a>
+    </div>
+</div>
