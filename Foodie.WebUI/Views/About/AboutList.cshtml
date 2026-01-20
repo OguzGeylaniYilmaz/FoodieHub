@@ -5,47 +5,89 @@
     Layout = "~/Views/Admin/Index.cshtml";
 }
 
-
-
 <section class="section">
     <div class="section-body">
-        <div class="row">
-            <div class="col-12 col-md-6 col-lg-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>About List</h4>
-                    </div>
-                    <div class="card-body">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col"> Title </th>
-                                    <th scope="col"> Description </th>
-                                    <th scope="col"> Edit </th>
-                                    <th scope="col"> Delete </th>
-                                </tr>
-                            </thead>
-                            <tbody>
+        <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>About Content Management</h4>
+                <a asp-controller="About" asp-action="CreateAbout" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus"></i> Add New Content
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th class="text-center" style="width: 180px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>@item.Title</td>
-                                        <td>@item.Description</td>
-                                        <td><a href="/About/UpdateAbout/@item.AboutID" class="btn btn-primary">Edit</a></td>
-                                        <td><a href="/About/DeleteAbout/@item.AboutID" class="btn btn-danger">Delete</a></td>
+                                        <td class="font-weight-600">@item.Title</td>
+                                        <td>
+                                            @* Truncate description if it's too long *@
+                                            @(item.Description.Length > 120 
+                                                ? item.Description.Substring(0, 120) + "..." 
+                                                : item.Description)
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="btn-group" role="group">
+                                                <a asp-controller="About" 
+                                                   asp-action="UpdateAbout" 
+                                                   asp-route-id="@item.AboutID" 
+                                                   class="btn btn-info btn-sm" 
+                                                   title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <button onclick="deleteConfirm(@item.AboutID)" 
+                                                        class="btn btn-danger btn-sm" 
+                                                        title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
                                     </tr>
                                 }
-                            </tbody>
-                        </table>
-                        <a href="/About/CreateAbout/" class="btn btn-success">Create About</a>
-                    </div>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-4">
+                                        <i class="fas fa-info-circle mr-2"></i> No data available to display.
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
-
             </div>
-
         </div>
     </div>
 </section>
 
-
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function deleteConfirm(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This action cannot be undone!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/About/DeleteAbout/" + id;
+            }
+        })
+    }
+</script>
